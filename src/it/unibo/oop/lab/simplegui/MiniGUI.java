@@ -10,9 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -24,6 +26,7 @@ import javax.swing.JPanel;
 public class MiniGUI {
 
     private static final String TITLE = "A very simple GUI application";
+    private static final String TEXT_FIELD_CONTENT = "Result";
     private static final int PROPORTION = 5;
     private final Random rng = new Random();
     private final JFrame frame = new JFrame(TITLE);
@@ -34,8 +37,15 @@ public class MiniGUI {
     public MiniGUI() {
         final JPanel canvas = new JPanel();
         canvas.setLayout(new BorderLayout());
+        //Ex. 01.01
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new BoxLayout(panel1, BoxLayout.LINE_AXIS));
+        canvas.add(panel1, BorderLayout.CENTER);
         final JButton write = new JButton("Print a random number on standard output");
-        canvas.add(write, BorderLayout.CENTER);
+        canvas.add(write);
+        //Ex. 01.02
+        final JTextField resultField = new JTextField(TEXT_FIELD_CONTENT);
+        canvas.add(resultField, BorderLayout.NORTH);
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /*
@@ -44,7 +54,10 @@ public class MiniGUI {
         write.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                System.out.println(rng.nextInt());
+                //Ex 01.03
+                final int result = rng.nextInt();
+                System.out.println(result);
+                resultField.setText(Integer.toString(result));
             }
         });
     }
@@ -68,6 +81,7 @@ public class MiniGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        frame.pack();
         /*
          * OK, ready to pull the frame onscreen
          */
