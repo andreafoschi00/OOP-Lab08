@@ -1,10 +1,18 @@
 package it.unibo.oop.lab.mvcio;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+
 /**
  * 
  */
 public class Controller {
 
+    private static final String HOME_FOLDER = System.getProperty("user.home");
+    private static final String SEPARATOR_SYMBOL = System.getProperty("file.separator");
+    private static final String DEFAULT_FILE = "output.txt";
+    private File destination = new File(HOME_FOLDER + SEPARATOR_SYMBOL + DEFAULT_FILE);
     /*
      * This class must implement a simple controller responsible of I/O access. It
      * considers a single file at a time, and it is able to serialize objects in it.
@@ -28,4 +36,54 @@ public class Controller {
      * to a software that runs correctly on every platform.
      */
 
+    //1)
+    /**
+     * 
+     * @param file
+     *              the file to set as destination
+     */
+    public void setFileDestination(final File file) {
+        final File parentFile = file.getParentFile();
+        if (parentFile.exists()) {
+            destination = file;
+        } else {
+            throw new IllegalArgumentException("Cannot save in a non-existing folder.");
+        }
+    }
+    /**
+     * 
+     * @param s
+     *              the file to set as destination
+     */
+    public void setFileDestination(final String s) {
+        setFileDestination(new File(s));
+    }
+    //2)
+    /**
+     * 
+     * @return current destination file
+     */
+    public File getCurrentFile() {
+        return destination;
+    }
+    //3)
+    /**
+     * 
+     * @return current destination file as path
+     */
+    public String getCurrentFilePath() {
+        return destination.getPath();
+    }
+    //4)
+    /**
+     * 
+     * @param s
+     *          the string to write on the file
+     * @throws IOException
+     */
+    public void saveStringToCurrentFile(final String s) throws IOException {
+        try (PrintStream outStream = new PrintStream(destination)) {
+            outStream.println(s);
+        }
+    }
 }
