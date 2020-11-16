@@ -1,9 +1,18 @@
 package it.unibo.oop.lab.mvcio;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.LayoutManager;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  * A very simple program using a graphical interface.
@@ -11,7 +20,7 @@ import javax.swing.JFrame;
  */
 public final class SimpleGUI {
 
-    private final JFrame frame = new JFrame();
+    private final JFrame frame = new JFrame("Java GUI Application");
 
     /*
      * Once the Controller is done, implement this class in such a way that:
@@ -36,7 +45,29 @@ public final class SimpleGUI {
     /**
      * builds a new {@link SimpleGUI}.
      */
-    public SimpleGUI() {
+    private SimpleGUI(final Controller controller) {
+        //1) - 2)
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        final JTextArea textArea = new JTextArea();
+        final JPanel panel1 = new JPanel();
+        final LayoutManager layout1 = new BorderLayout();
+        panel1.setLayout(layout1);
+        //3)
+        final JButton save = new JButton("Save");
+        save.addActionListener(new ActionListener() {
+            //5)
+            @Override
+            public void actionPerformed(final ActionEvent event) {
+                try {
+                    controller.saveStringToCurrentFile(textArea.getText());
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Something went wrong", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        panel1.add(textArea, BorderLayout.CENTER);
+        panel1.add(save, BorderLayout.SOUTH);
+        frame.setContentPane(panel1);
         /*
          * Make the frame half the resolution of the screen. This very method is
          * enough for a single screen setup. In case of multiple monitors, the
@@ -58,5 +89,11 @@ public final class SimpleGUI {
          */
         frame.setLocationByPlatform(true);
     }
-
+    private void display() {
+        frame.setVisible(true);
+    }
+    public static void main(final String... args) {
+        final SimpleGUI gui = new SimpleGUI(new Controller());
+        gui.display();
+    }
 }
